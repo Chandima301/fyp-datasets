@@ -1,4 +1,5 @@
 import orjson
+import json
 import networkx
 import csv
 import gc
@@ -102,7 +103,7 @@ def create_dataset():
     fos_missing_count = 0
     # full_data = dict()
 
-    with open("dblp.v11/citation_selected_attr.txt", "r") as selected_attr_file:
+    with open("citation_selected_attr.txt", "r") as selected_attr_file:
         reader = csv.reader(selected_attr_file, delimiter=' ')
         selected_attr = [str(row[0]).replace('"', '').lower() for row in reader]
 
@@ -111,20 +112,21 @@ def create_dataset():
 
     G = networkx.DiGraph()
 
-    with open("dblp.v11/dblp_papers_v11.txt", "r") as dblp_file:
+    with open("../../datasets/dblp_v14.json", "r") as dblp_file:
         print("File opened")
-        for line in dblp_file:
-            paper_dict = orjson.loads(line)
 
-            pid = paper_dict["id"]
+        dblp_json = json.load(dblp_file)
 
-            paper_id, references, edges = create_edges(pid, paper_dict)
+        for paper in dblp_json:
+            pid = paper["id"]
+
+            paper_id, references, edges = create_edges(pid, paper)
 
             G.add_node(paper_id)
             G.add_nodes_from(references)
             G.add_edges_from(edges)
 
-            create_attr(paper_id, paper_dict, selected_attr, N)
+            create_attr(paper_id, paper, selected_attr, N)
 
             if count % 100000 == 0:
                 # output the current stored paper_id attributes into a json and clear memory
@@ -135,7 +137,7 @@ def create_dataset():
 
     E = G.edges()
     print("Writing edgelist", len(E))
-    with open("dblp.v11/citation_edgelist.txt", "w", newline='') as co_author_edge_file:
+    with open("citation_edgelist.txt", "w", newline='') as co_author_edge_file:
         writer = csv.writer(co_author_edge_file, delimiter=" ")
         for edge in E:
             writer.writerow(edge)
@@ -146,7 +148,7 @@ def create_dataset():
 
     # del paper_data
     print("Writing fos", len(paper_data[0]))  # 4107340
-    with open(f"dblp.v11/citation_attr.txt", "w", newline='') as co_author_attr_file:
+    with open(f"citation_attr.txt", "w", newline='') as co_author_attr_file:
         writer = csv.writer(co_author_attr_file, delimiter=" ")
         for id, vector in paper_items:
             data = [id] + vector
