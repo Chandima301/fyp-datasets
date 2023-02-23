@@ -117,7 +117,7 @@ def create_dataset():
 
         for line in dblp_file:
 
-            paper_dict = orjson.loads(line)
+            paper_dict = orjson.loads(line[:-2])
             pid = paper_dict["id"]
 
             paper_id, references, edges = create_edges(pid, paper_dict)
