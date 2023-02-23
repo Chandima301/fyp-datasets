@@ -11,9 +11,7 @@ def selected_paper_fos(t=0.003):
     print("Threshold:", t)
     with open("../../datasets/dblp_v14.json", "r") as dblp_file:
         print("File opened")
-        N = 4107341
-        print(N)
-        dblp_json = json.load(dblp_file)
+        dblp_json = orjson.loads(dblp_file.read())
         for paper in dblp_json:
 
             try:
