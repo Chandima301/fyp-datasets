@@ -112,7 +112,7 @@ def create_dataset():
 
     G = networkx.DiGraph()
 
-    with open("../../datasets/dblp_v14.json", "r") as dblp_file:
+    with open("../../datasets/dblp_v14.txt", "r") as dblp_file:
         print("File opened")
 
         for line in dblp_file:
