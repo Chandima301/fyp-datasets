@@ -13,7 +13,7 @@ def selected_paper_fos(t=0.003):
         print("File opened")
 
         for line in dblp_file:
-            paper_dict = orjson.loads(line)
+            paper_dict = orjson.loads(line[:-2])
             try:
                 fields = paper_dict["fos"] #[(item["name"].replace('"', ""), item["w"]) for item in paper_dict["fos"]]
             except KeyError:
