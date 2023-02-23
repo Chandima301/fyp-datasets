@@ -115,18 +115,18 @@ def create_dataset():
     with open("../../datasets/dblp_v14.json", "r") as dblp_file:
         print("File opened")
 
-        dblp_json = json.load(dblp_file)
+        for line in dblp_file:
 
-        for paper in dblp_json:
-            pid = paper["id"]
+            paper_dict = orjson.loads(line)
+            pid = paper_dict["id"]
 
-            paper_id, references, edges = create_edges(pid, paper)
+            paper_id, references, edges = create_edges(pid, paper_dict)
 
             G.add_node(paper_id)
             G.add_nodes_from(references)
             G.add_edges_from(edges)
 
-            create_attr(paper_id, paper, selected_attr, N)
+            create_attr(paper_id, paper_dict, selected_attr, N)
 
             if count % 100000 == 0:
                 # output the current stored paper_id attributes into a json and clear memory
