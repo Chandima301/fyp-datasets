@@ -9,13 +9,13 @@ def selected_paper_fos(t=0.003):
     count = 0
     fos = dict()
     print("Threshold:", t)
-    with open("../../datasets/dblp_v14.json", "r") as dblp_file:
+    with open("../../datasets/dblp_v14.txt", "r") as dblp_file:
         print("File opened")
-        dblp_json = orjson.loads(dblp_file.read())
-        for paper in dblp_json:
 
+        for line in dblp_file:
+            paper_dict = orjson.loads(line)
             try:
-                fields = paper["fos"] #[(item["name"].replace('"', ""), item["w"]) for item in paper_dict["fos"]]
+                fields = paper_dict["fos"] #[(item["name"].replace('"', ""), item["w"]) for item in paper_dict["fos"]]
             except KeyError:
                 # fos key missing in data
                 continue
