@@ -135,12 +135,12 @@ def create_dataset():
 
             count += 1
 
-    E = G.edges()
+    E = G.edges.data()
     print("Writing edgelist", len(E))
     with open("citation_edgelist.txt", "w", newline='') as co_author_edge_file:
         writer = csv.writer(co_author_edge_file, delimiter=" ")
         for edge in E:
-            writer.writerow(edge)
+            writer.writerow([edge[0], edge[1], edge[2]["timestamp"]])
 
     # output the last stored paper_id attributes into a json and clear memory
     print(count)
