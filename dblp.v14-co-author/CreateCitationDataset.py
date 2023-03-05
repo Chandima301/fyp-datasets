@@ -146,16 +146,16 @@ def create_dataset():
 
     # output the last stored paper_id attributes into a json and clear memory
     print(count)
-    paper_items = paper_data.items()
+    author_items = author_data.items()
 
     # del paper_data
     print("Writing fos", len(paper_data[0]))  # 4107340
     with open(f"co_author_attr.csv", "w+", newline='') as co_author_attr:
         writer = csv.writer(co_author_attr, delimiter=",")
-        for id, vector in paper_items:
+        for id, vector in author_items:
             data = [id] + vector
             writer.writerow(data)
-    del paper_items
+    del author_items
 
 
 if __name__ == "__main__":
