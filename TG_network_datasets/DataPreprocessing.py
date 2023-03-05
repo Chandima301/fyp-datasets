@@ -18,10 +18,9 @@ def read_dataset():
             item_id_list.append(i)
 
             ts = float(e[2])  # timestamp  --> assumed in ascending order (I've checked it)
-
-            node_max_id = max(max(user_id_list), max(item_id_list))
-
             edge_list.append([u, i, ts])
+
+    node_max_id = max(max(user_id_list), max(item_id_list))
 
     return edge_list, node_max_id
 
