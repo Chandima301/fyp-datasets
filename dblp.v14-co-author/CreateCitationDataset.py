@@ -149,7 +149,7 @@ def create_dataset():
     author_items = author_data.items()
 
     # del paper_data
-    print("Writing fos", len(paper_data[0]))  # 4107340
+    print("Writing fos", len(author_data[0]))  # 4107340
     with open(f"co_author_attr.csv", "w+", newline='') as co_author_attr:
         writer = csv.writer(co_author_attr, delimiter=",")
         for id, vector in author_items:
