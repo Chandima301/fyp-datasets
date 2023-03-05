@@ -6,7 +6,7 @@ def read_dataset():
     edge_list = []
     user_id_list = []
     item_id_list = []
-    node_list = []
+    node_max_id = 0
     with open("../../TG_network_datasets/Flights/Flights.csv", "r") as f:
         s = next(f)  # skip the first line
         for idx, line in enumerate(f):
@@ -14,29 +14,26 @@ def read_dataset():
             u = int(e[0])  # user_id
             i = int(e[1])  # item_id
 
-            if u not in user_id_list:
-                user_id_list.append(u)
-            if i not in item_id_list:
-                item_id_list.append(i)
+            user_id_list.append(u)
+            item_id_list.append(i)
 
             ts = float(e[2])  # timestamp  --> assumed in ascending order (I've checked it)
 
-            edge_list.append([u, i, ts])
-            node_list.extend(user_id_list)
-            node_list.extend(item_id_list)
+            node_max_id = max(max(user_id_list), max(item_id_list))
 
-    return edge_list, node_list
+            edge_list.append([u, i, ts])
+
+    return edge_list, node_max_id
 
 
 def preprocess_dataset():
     n_node_feat = 8
-    edge_list, node_list = read_dataset()
-    node_list.sort()
+    edge_list, node_max_id = read_dataset()
 
     node_features_list = []
 
     # add node features
-    for node in node_list:
+    for node in range(node_max_id):
         node_features_list.append([node] + [0] * n_node_feat)
 
     save_dataset(edge_list, node_features_list)
