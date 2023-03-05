@@ -102,7 +102,7 @@ def create_dataset():
     fos_missing_count = 0
     # full_data = dict()
 
-    with open("citation_selected_attr.txt", "r") as selected_attr_file:
+    with open("co_author_selected_attr.txt", "r") as selected_attr_file:
         reader = csv.reader(selected_attr_file, delimiter=' ')
         selected_attr = [str(row[0]).replace('"', '').lower() for row in reader]
 
@@ -139,7 +139,7 @@ def create_dataset():
 
     E = G.edges.data()
     print("Writing edgelist", len(E))
-    with open("co_author_edgelist.csv", "w", newline='') as co_author_attr:
+    with open("co_author_edgelist.csv", "w+", newline='') as co_author_attr:
         writer = csv.writer(co_author_attr, delimiter=",")
         for edge in E:
             writer.writerow([edge[0], edge[1], edge[2]["timestamp"]])
@@ -150,7 +150,7 @@ def create_dataset():
 
     # del paper_data
     print("Writing fos", len(paper_data[0]))  # 4107340
-    with open(f"co_author_attr.csv", "w", newline='') as co_author_attr:
+    with open(f"co_author_attr.csv", "w+", newline='') as co_author_attr:
         writer = csv.writer(co_author_attr, delimiter=",")
         for id, vector in paper_items:
             data = [id] + vector
