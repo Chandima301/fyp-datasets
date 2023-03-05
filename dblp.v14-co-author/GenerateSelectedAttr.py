@@ -40,7 +40,7 @@ def selected_paper_fos(t=0.003):
     filtered_fos = list(filter(lambda x: x[1] > t, fos.items()))  # 0.0015 :- 804, 948 in prev year, 0.0004 - 1842
     print("Filtering done", len(filtered_fos), len(fos))
     print("Writing fos")
-    with open(f"citation_selected_attr.txt", "w+", newline='') as co_author_partial_attr_file:
+    with open(f"co_author_selected_attr.txt", "w+", newline='') as co_author_partial_attr_file:
         writer = csv.writer(co_author_partial_attr_file, delimiter=" ")
         for f in filtered_fos:
             writer.writerow(f)
