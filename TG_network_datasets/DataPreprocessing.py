@@ -32,6 +32,7 @@ def preprocess_dataset():
 
     node_features_list = []
 
+    print("Adding node features")
     # add node features
     for node in range(node_max_id):
         node_features_list.append([node] + [0] * n_node_feat)
