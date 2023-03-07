@@ -1,5 +1,4 @@
 import orjson
-import json
 import networkx
 import csv
 import gc
