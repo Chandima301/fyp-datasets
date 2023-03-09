@@ -13,9 +13,9 @@ print(truststruct)
 print("Writing edgelist", len(truststruct))
 with open("epinion_trust_with_timestamp.csv", "w+", newline='') as edge_file:
     writer = csv.writer(edge_file, delimiter=",")
+    writer.writerow(["source", "destination", "timestamp"])
     for edge in truststruct:
         writer.writerow(edge)
-
 
 print("")
 
