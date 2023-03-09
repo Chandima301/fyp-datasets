@@ -1,5 +1,6 @@
 import scipy.io as sio
 import csv
+from collections import Counter
 
 print("Reading trust relations....")
 mat_contents = sio.loadmat("epinion_trust_with_timestamp.mat")
@@ -14,7 +15,7 @@ print(truststruct)
 print("Writing edgelist", len(truststruct))
 with open("epinion_trust_with_timestamp.csv", "w+", newline='') as edge_file:
     writer = csv.writer(edge_file, delimiter=",")
-    writer.writerow(["source", "destination", "timestamp"])
+    writer.writerow(["source", "target", "timestamp"])
     for edge in sorted_trust_relations:
         writer.writerow(edge)
 
@@ -50,10 +51,18 @@ with open("rating.csv", "w+", newline='') as node_file:
     writer.writerow(["node", "column_1", "column_2"])
 
     for user_id in user_rating.keys():
-        all_user_rating = user_rating[user_id]
-        avg_rating = sum(all_user_rating) / len(all_user_rating)
 
-        all_user_helpfulness = user_rating_helpfulness[user_id]
-        avg_helpfulness = sum(all_user_helpfulness)/len(all_user_helpfulness)
+        feature_vector = []
 
-        writer.writerow([user_id, avg_rating, avg_helpfulness])
+        rating_counts = Counter(user_rating[user_id])
+        helpfulness_counts = Counter(user_rating_helpfulness[user_id])
+
+        # 5 values for rating
+        for i in range(1, 6):
+            feature_vector.append(rating_counts[i] / len(user_rating))
+
+        # 5 values for rating
+        for j in range(1, 6):
+            feature_vector.append(helpfulness_counts[i] / len(user_rating_helpfulness))
+
+        writer.writerow([user_id] + feature_vector)

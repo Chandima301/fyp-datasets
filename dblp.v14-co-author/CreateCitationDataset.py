@@ -142,7 +142,7 @@ def create_dataset():
     print("Writing edgelist", len(E))
     with open("co_author_edgelist.csv", "w+", newline='') as co_author_attr:
         writer = csv.writer(co_author_attr, delimiter=",")
-        writer.writerow(["source", "destination", "timestamp"])
+        writer.writerow(["source", "target", "timestamp"])
         for edge in sorted_E:
             writer.writerow([edge[0], edge[1], edge[2]["timestamp"]])
 
@@ -164,4 +164,4 @@ if __name__ == "__main__":
     author_data = dict()
     author_set = set([])
     author_map = dict()
-    create_dataset()  # 3655052 11697041
+    create_dataset()

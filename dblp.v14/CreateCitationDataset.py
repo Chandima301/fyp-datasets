@@ -142,7 +142,7 @@ def create_dataset():
 
     with open("citation_edgelist.csv", "w+", newline='') as edge_file:
         writer = csv.writer(edge_file, delimiter=" ")
-        writer.writerow(["source", "destination", "timestamp"])
+        writer.writerow(["source", "target", "timestamp"])
         for e in sorted_E:
             writer.writerow([e[0], e[1], e[2]["timestamp"]])
 
