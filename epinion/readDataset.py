@@ -59,10 +59,10 @@ with open("rating.csv", "w+", newline='') as node_file:
 
         # 5 values for rating
         for i in range(1, 6):
-            feature_vector.append(rating_counts[i] / len(user_rating))
+            feature_vector.append(rating_counts[i] / len(user_rating[user_id]))
 
         # 5 values for rating
         for j in range(1, 6):
-            feature_vector.append(helpfulness_counts[i] / len(user_rating_helpfulness))
+            feature_vector.append(helpfulness_counts[j] / len(user_rating_helpfulness[user_id]))
 
         writer.writerow([user_id] + feature_vector)
