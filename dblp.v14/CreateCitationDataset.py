@@ -136,11 +136,14 @@ def create_dataset():
             count += 1
 
     E = G.edges.data()
+    sorted_E = sorted(E, key=lambda edge: edge[2])
+
     print("Writing edgelist", len(E))
-    with open("citation_edgelist.txt", "w", newline='') as edge_file:
+
+    with open("citation_edgelist.txt", "w+", newline='') as edge_file:
         writer = csv.writer(edge_file, delimiter=" ")
-        for edge in E:
-            writer.writerow([edge[0], edge[1], edge[2]["timestamp"]])
+        for e in sorted_E:
+            writer.writerow([e[0], e[1], e[2]["timestamp"]])
 
     # output the last stored paper_id attributes into a json and clear memory
     print(count)
@@ -148,7 +151,7 @@ def create_dataset():
 
     # del paper_data
     print("Writing fos", len(paper_data[0]))  # 4107340
-    with open(f"citation_attr.txt", "w", newline='') as attr_file:
+    with open(f"citation_attr.txt", "w+", newline='') as attr_file:
         writer = csv.writer(attr_file, delimiter=" ")
         for id, vector in paper_items:
             data = [id] + vector
