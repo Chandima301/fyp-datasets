@@ -132,7 +132,6 @@ def create_dataset():
                 # output the current stored paper_id attributes into a json and clear memory
                 gc.collect()
                 print(count)
-                break
 
             count += 1
 

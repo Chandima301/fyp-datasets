@@ -132,15 +132,19 @@ def create_dataset():
                 # output the current stored paper_id attributes into a json and clear memory
                 gc.collect()
                 print(count)
+                break
 
             count += 1
             del authors, paper_dict
 
     E = G.edges.data()
+    sorted_E = sorted(E, key=lambda edge: edge[2]["timestamp"])
+
     print("Writing edgelist", len(E))
     with open("co_author_edgelist.csv", "w+", newline='') as co_author_attr:
         writer = csv.writer(co_author_attr, delimiter=",")
-        for edge in E:
+        writer.writerow(["source", "destination", "timestamp"])
+        for edge in sorted_E:
             writer.writerow([edge[0], edge[1], edge[2]["timestamp"]])
 
     # output the last stored paper_id attributes into a json and clear memory
