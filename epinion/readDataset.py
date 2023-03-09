@@ -8,13 +8,14 @@ print(mat_contents.keys())
 print("")
 print("Trust relations content")
 truststruct = mat_contents['trust']
+sorted_trust_relations = sorted(truststruct, key=lambda relation: relation[2])
 print(truststruct)
 
 print("Writing edgelist", len(truststruct))
 with open("epinion_trust_with_timestamp.csv", "w+", newline='') as edge_file:
     writer = csv.writer(edge_file, delimiter=",")
     writer.writerow(["source", "destination", "timestamp"])
-    for edge in truststruct:
+    for edge in sorted_trust_relations:
         writer.writerow(edge)
 
 print("")
