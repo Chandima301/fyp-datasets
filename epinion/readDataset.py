@@ -74,6 +74,6 @@ with open("rating.csv", "w+", newline='') as node_file:
         product_category_feature_vector = []
         # for product categories
         for k in all_categories:
-            product_category_feature_vector.append(round((category_counts[k]/len(all_categories)), 3))
+            product_category_feature_vector.append(round((category_counts[k]/len(user_categories[user_id])), 3))
 
         writer.writerow([user_id] + feature_vector + product_category_feature_vector)
