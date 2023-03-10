@@ -12,11 +12,13 @@ def read_dataset():
             u = int(e[0])  # user_id
             i = int(e[1])  # item_id
 
+            edge_features = [float(i) for i in e[4:]]
+
             node_id_list.add(u)
             node_id_list.add(i)
 
             ts = float(e[2])  # timestamp  --> assumed in ascending order (I've checked it)
-            edge_list.append([u, i, ts])
+            edge_list.append([u, i, ts] + edge_features)
 
     return edge_list, node_id_list
 
@@ -45,6 +47,10 @@ def save_dataset(edge_list, node_features_list):
     print("Writing node features", len(node_features_list))
     with open("node_features.csv", "w+", newline='') as node_file:
         writer = csv.writer(node_file, delimiter=",")
+        first_line = ["source", "target", "timestamp"]
+        for k in range(len(node_features_list)-3):
+            first_line.append("feature_" + str(k+1))
+        writer.writerow(first_line)
         for node in node_features_list:
             writer.writerow(node)
 
