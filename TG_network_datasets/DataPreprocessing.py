@@ -42,7 +42,7 @@ def save_dataset(edge_list, node_features_list):
     with open("edgelist_with_timestamp.csv", "w+", newline='') as edge_file:
         writer = csv.writer(edge_file, delimiter=",")
         first_line = ["source", "target", "timestamp"]
-        for k in range(len(edge_list)-3):
+        for k in range(len(edge_list[1])-3):
             first_line.append("feature_" + str(k+1))
         writer.writerow(first_line)
         for edge in edge_list:
