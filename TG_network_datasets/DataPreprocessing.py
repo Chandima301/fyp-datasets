@@ -1,11 +1,11 @@
-import csv
+from utils.create_node_features import create_node_features
+from utils.save_dataset import save_dataset
 
 
-def read_dataset():
-    print("Preprocessing dataset")
+def read_dataset(file_path):
+    print("Reading dataset")
     edge_list = []
-    node_id_list = set()
-    with open("../../TG_network_datasets/Flights/Flights.csv", "r") as f:
+    with open(file_path, "r") as f:
         s = next(f)  # skip the first line
         for idx, line in enumerate(f):
             e = line.strip().split(',')
@@ -13,49 +13,13 @@ def read_dataset():
             i = int(e[1])  # item_id
 
             edge_features = [float(i) for i in e[4:]]
-
-            node_id_list.add(u)
-            node_id_list.add(i)
-
             ts = float(e[2])  # timestamp  --> assumed in ascending order (I've checked it)
             edge_list.append([u, i, ts] + edge_features)
 
-    return edge_list, node_id_list
-
-
-def preprocess_dataset():
-    n_node_feat = 8
-    edge_list, node_id_list = read_dataset()
-
-    node_features_list = []
-
-    print("Adding node features")
-    # add node features
-    for node in node_id_list:
-        node_features_list.append([node] + [0] * n_node_feat)
-
-    save_dataset(edge_list, node_features_list)
-
-
-def save_dataset(edge_list, node_features_list):
-    print("Writing edgelist", len(edge_list))
-    with open("edgelist_with_timestamp.csv", "w+", newline='') as edge_file:
-        writer = csv.writer(edge_file, delimiter=",")
-        first_line = ["source", "target", "timestamp"]
-        for k in range(len(edge_list[1])-3):
-            first_line.append("feature_" + str(k+1))
-        writer.writerow(first_line)
-        for edge in edge_list:
-            writer.writerow(edge)
-
-    print("Writing node features", len(node_features_list))
-    with open("node_features.csv", "w+", newline='') as node_file:
-        writer = csv.writer(node_file, delimiter=",")
-        for node in node_features_list:
-            writer.writerow(node)
+    return edge_list
 
 
 if __name__ == "__main__":
-    paper_data = dict()
-    paper_map = dict()
-    preprocess_dataset()
+    edges = read_dataset("../../TG_network_datasets/Flights/Flights.csv")
+    node_features = create_node_features(edges, node_degree=True, page_rank=False, graph_coloring=True, triangle_count=True)
+    save_dataset(edges, node_features,  edge_list_file_path="tg_edges.csv", node_list_file_path="tg_nodes.csv")
