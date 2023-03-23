@@ -15,14 +15,18 @@ def create_edges(pid, paper_dict):
     paper_id = paper_map[pid]
 
     try:
+        timestamp = paper_dict["year"]
+        if timestamp == 0 or timestamp == 2024:
+            print(paper_dict)
+    except KeyError:
+        return paper_id, [], []
+
+
+    try:
         references = paper_dict["references"]
     except KeyError:
         return paper_id, [], []
 
-    try:
-        timestamp = paper_dict["year"]
-    except KeyError:
-        return paper_id, [], []
 
     temp_ref_set = set()
 
