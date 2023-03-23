@@ -5,7 +5,7 @@ from utils.save_dataset import save_dataset
 def read_dataset(file_path):
     print("Reading dataset")
     edge_list = []
-
+    count = 1
     with open(file_path, "r") as f:
         # s = next(f)  # skip the first line
         for idx, line in enumerate(f):
@@ -14,8 +14,9 @@ def read_dataset(file_path):
             i = int(e[1])  # target id
 
             rating = float(e[2])
-            ts = float(e[3])  # timestamp  --> assumed in ascending order (I've checked it)
+            ts = float(count)  # timestamp  --> assumed in ascending order (I've checked it)
             edge_list.append([u, i, ts, rating])
+            count += 1
 
     return edge_list
 
