@@ -1,4 +1,3 @@
-from stellargraph import StellarGraph
 import pandas as pd
 import networkx as nx
 
@@ -57,14 +56,13 @@ def create_node_features(edge_list, node_degree=False, page_rank=False, graph_co
 def create_node_features_1(edge_df, node_degree=False, page_rank=False, graph_coloring=False, triangle_count=False):
     print("Creating node features")
 
-    graph = StellarGraph(edges=edge_df)
-    networkx_graph = graph.to_networkx()
+    networkx_graph = nx.from_pandas_edgelist(edge_df, edge_attr=True, create_using=nx.MultiGraph)
 
     node_degree_dict = {}
     max_node_degree = 0
     if node_degree:
         print("-Calculating node degrees")
-        node_degree_dict = dict(graph.node_degrees())
+        node_degree_dict = {node:val for node, val in networkx_graph.degree()}
         max_node_degree = max(node_degree_dict.values())
 
     pagerank_dict = {}
@@ -88,7 +86,7 @@ def create_node_features_1(edge_df, node_degree=False, page_rank=False, graph_co
 
     node_features_list = []
 
-    for key in graph.nodes():
+    for key in networkx_graph.nodes():
         temp = [key]
         if node_degree:
             temp += [node_degree_dict[key]/max_node_degree]
