@@ -44,4 +44,4 @@ def read_dataset(file_path):
 if __name__ == "__main__":
     edges = read_dataset("../../datasets/sx-stackoverflow.txt")
     node_features = create_node_features_1(edges, node_degree=True, page_rank=False, graph_coloring=True, triangle_count=True)
-    save_dataset(edges, node_features,  edge_list_file_path="stackoverflow_edges.csv", node_list_file_path="stackoverflow.csv")
+    save_dataset(edges, node_features,  edge_list_file_path="stackoverflow_edges.csv", node_list_file_path="stackoverflow_nodes.csv")
