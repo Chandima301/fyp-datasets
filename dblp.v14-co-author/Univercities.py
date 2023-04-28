@@ -13,7 +13,7 @@ def selected_paper_fos():
           #  print(line)
             paper_dict = orjson.loads(line[:-2])
             try:
-                authors = paper_dict["author"]
+                authors = paper_dict["authors"]
             except KeyError:
                 # author key missing in data
                 continue
@@ -25,7 +25,7 @@ def selected_paper_fos():
                 except KeyError:
                     author_affiliations[author_affiliation] = 1
 
-            if count % 10 == 0:
+            if count % 100000 == 0:
                 # print(len(filtered_items), len(items))
                 gc.collect()
 
