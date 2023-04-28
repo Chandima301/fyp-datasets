@@ -40,6 +40,9 @@ def selected_paper_fos():
                 print(count)
             count += 1
 
+            if count >= 600000:
+                break
+
     print("Writing author affiliations")
     with open(f"author_affiliations.txt", "w+", newline='') as author_affiliations_file:
         writer = csv.writer(author_affiliations_file, delimiter=" ")
