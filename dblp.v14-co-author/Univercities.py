@@ -23,7 +23,7 @@ def selected_paper_fos():
 
                 if author_affiliation != "":
                     try:
-                        author_county = author_affiliation.split(", ")[-1]
+                        author_county = author_affiliation.split(",")[-1].strip()
                     except IndexError:
                         print(author_affiliation)
                     try:
