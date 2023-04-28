@@ -19,7 +19,7 @@ def selected_paper_fos():
                 continue
 
             for f in authors:
-                author_name, author_affiliation, author_id = f.values()
+                author_id, author_name, author_affiliation = f.values()
                 try:
                     author_affiliations[author_affiliation] += 1
                 except KeyError:
@@ -35,7 +35,7 @@ def selected_paper_fos():
     print("Writing author affiliations")
     with open(f"author_affiliations.txt", "w+", newline='') as author_affiliations_file:
         writer = csv.writer(author_affiliations_file, delimiter=" ")
-        for key, value in author_affiliations:
+        for key, value in author_affiliations.items():
             writer.writerow([key, value])
 
 
