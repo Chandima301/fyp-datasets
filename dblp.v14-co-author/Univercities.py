@@ -10,7 +10,7 @@ def selected_paper_fos():
     with open("../../datasets/dblp_v14.txt", "r") as dblp_file:
         print("File opened")
         for line in dblp_file:
-            print(line)
+          #  print(line)
             paper_dict = orjson.loads(line[:-2])
             try:
                 authors = paper_dict["author"]
