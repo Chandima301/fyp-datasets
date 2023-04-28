@@ -25,7 +25,7 @@ def selected_paper_fos():
                 except KeyError:
                     author_affiliations[author_affiliation] = 1
 
-            if count % 1000 == 0:
+            if count % 10 == 0:
                 # print(len(filtered_items), len(items))
                 gc.collect()
 
