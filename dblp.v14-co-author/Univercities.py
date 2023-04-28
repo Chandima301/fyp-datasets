@@ -22,7 +22,7 @@ def selected_paper_fos():
                 author_id, author_name, author_affiliation = f.values()
 
                 if author_affiliation != "":
-                    author_county = author_affiliation.split()[-1]
+                    author_county = author_affiliation.split(", ")[-1]
                     try:
                         author_affiliations[author_county] += 1
                     except KeyError:
