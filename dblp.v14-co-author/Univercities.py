@@ -20,10 +20,15 @@ def selected_paper_fos():
 
             for f in authors:
                 author_id, author_name, author_affiliation = f.values()
-                try:
-                    author_affiliations[author_affiliation] += 1
-                except KeyError:
-                    author_affiliations[author_affiliation] = 1
+
+                if author_affiliation != "":
+                    author_county = author_affiliation.split()[-1]
+                    try:
+                        author_affiliations[author_county] += 1
+                    except KeyError:
+                        author_affiliations[author_county] = 1
+                else:
+                    continue
 
             if count % 100000 == 0:
                 # print(len(filtered_items), len(items))
