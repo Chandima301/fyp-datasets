@@ -31,11 +31,12 @@ def create_edges(authors, paper_dict, author_affiliations):
 
     return temp_author_set, edges
 
-def get_feature_vector(selected_attr, author, attr, N):
+
+def get_feature_vector(selected_attr, author, attr):
     global author_data, author_set
     if author not in author_set:
         author_set.add(author)
-        feature_attr = [0] * (N)
+        feature_attr = [0] * (len(selected_attr))
         # feature_attr[0] = attr["n_citation"]
     else:
         feature_attr = author_data[author]
@@ -48,7 +49,7 @@ def get_feature_vector(selected_attr, author, attr, N):
         return feature_attr
 
     # Increment the no of appearencs count / no of authors in the partial file
-    for i in range(N):
+    for i in range(len(selected_attr)):
         try:
             # Update with author fos weight
             feature_attr[i] = max(feature_attr[i], fields[selected_attr[i]])
@@ -59,7 +60,7 @@ def get_feature_vector(selected_attr, author, attr, N):
     return feature_attr
 
 
-def create_attr(authors, paper_dict, selected_attr, N):
+def create_attr(authors, paper_dict, selected_attr):
     global author_data
     try:
         fos = [list(item.values()) for item in paper_dict["fos"]]
@@ -81,7 +82,7 @@ def create_attr(authors, paper_dict, selected_attr, N):
         if fos != []:
             attr["fos"] = fos
 
-        author_data[author_id] = get_feature_vector(selected_attr, author_id, attr, N) + [author_country]
+        author_data[author_id] = get_feature_vector(selected_attr, author_id, attr) + [author_country]
 
 
 def create_dataset():
@@ -92,9 +93,13 @@ def create_dataset():
         reader = csv.reader(author_affiliations_file, delimiter=' ')
         author_affiliations = [str(row[0]).replace('"', '').lower() for row in reader]
 
-    N = len(author_affiliations)
+    print("No of author affiliations: ", len(author_affiliations))
 
-    print(N)
+    with open("co_author_selected_attr.txt", "r") as selected_attr_file:
+        reader = csv.reader(selected_attr_file, delimiter=' ')
+        selected_attr = [str(row[0]).replace('"', '').lower() for row in reader]
+
+    print("No of author selected attributes: ", len(selected_attr))
 
     output_edges = []
 
@@ -112,7 +117,7 @@ def create_dataset():
 
             del authors_temp
 
-            create_attr(authors, paper_dict, author_affiliations, N)
+            create_attr(authors, paper_dict, selected_attr)
 
             if count % 100000 == 0:
                 # output the current stored paper_id attributes into a json and clear memory
