@@ -4,7 +4,7 @@ import gc
 from sys import argv
 
 
-def selected_author_affiliations(t=1000000):
+def selected_author_affiliations(t=100000):
     count = 0
     author_affiliations = dict()
     with open("../../datasets/dblp_v14.txt", "r") as dblp_file:
@@ -39,9 +39,6 @@ def selected_author_affiliations(t=1000000):
 
                 print(count)
             count += 1
-
-            if count >= 600000:
-                break
     filtered_author_affiliations = list(filter(lambda x: x[1] > t, author_affiliations.items()))
     print("Writing author affiliations")
     with open(f"author_affiliations.txt", "w+", newline='') as author_affiliations_file:
