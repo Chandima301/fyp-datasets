@@ -4,7 +4,7 @@ import gc
 from sys import argv
 
 
-def selected_paper_fos():
+def selected_author_affiliations(t=1000000):
     count = 0
     author_affiliations = dict()
     with open("../../datasets/dblp_v14.txt", "r") as dblp_file:
@@ -42,13 +42,13 @@ def selected_paper_fos():
 
             if count >= 600000:
                 break
-
+    filtered_author_affiliations = list(filter(lambda x: x[1] > t, author_affiliations.items()))
     print("Writing author affiliations")
     with open(f"author_affiliations.txt", "w+", newline='') as author_affiliations_file:
         writer = csv.writer(author_affiliations_file, delimiter=" ")
-        for key, value in author_affiliations.items():
-            writer.writerow([key, value])
+        for row in filtered_author_affiliations:
+            writer.writerow(row)
 
 
 if __name__ == "__main__":
-    selected_paper_fos()
+    selected_author_affiliations()
