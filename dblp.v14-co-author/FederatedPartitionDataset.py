@@ -99,7 +99,7 @@ def create_dataset():
         reader = csv.reader(selected_attr_file, delimiter=' ')
         selected_attr = [str(row[0]).replace('"', '').lower() for row in reader]
 
-    print("No of author selected attributes: ", len(selected_attr))
+    print("No of selected attributes: ", len(selected_attr))
 
     output_edges = []
 
@@ -132,26 +132,33 @@ def create_dataset():
     print("Writing edgelist")
 
     for country in author_affiliations:
+        edge_count = 0
         with open("./federated_partitioned/" + country + "_co_author_edgelist.csv", "w+", newline='') as co_author_attr:
             writer = csv.writer(co_author_attr, delimiter=",")
             writer.writerow(["source", "target", "timestamp"])
             for edge in sorted_output_edges:
                 if edge[3] == country:
                     writer.writerow([edge[0], edge[1], edge[2]["timestamp"]])
+                    edge_count += 1
+        print(edge_count, " edges written to country ", country)
 
     # output the last stored paper_id attributes into a json and clear memory
     print(count)
     author_items = author_data.items()
 
     # del paper_data
-    print("Writing fos", len(author_data[0]))  # 4107340
+    print("Writing vertices")  # 4107340
 
     for country in author_affiliations:
+        vertex_count = 0
         with open(f"./federated_partitioned/" + country + "_co_author_attr.csv", "w+", newline='') as co_author_attr:
             writer = csv.writer(co_author_attr, delimiter=",")
             for id, vector in author_items:
-                data = [id] + vector[:-1]
-                writer.writerow(data)
+                if vector[-1] == country:
+                    data = [id] + vector[:-1]
+                    writer.writerow(data)
+                    vertex_count += 1
+        print(vertex_count, " vertices written to country ", country)
     del author_items
 
 
