@@ -25,9 +25,11 @@ def create_edges(authors, paper_dict, author_affiliations):
             co_author_country = co_author["org"].split(",")[-1].strip().lower()
 
             if co_author["id"] != author["id"] and author_country == co_author_country and author_country.lower() in author_affiliations:
-                edges += [[author_map[author["id"]], author_map[co_author["id"]], {"timestamp": timestamp}, author_country]]
-                temp_author_set.add((author_map[author["id"]], author_country))
-                temp_author_set.add((author_map[co_author["id"]], co_author_country))
+                author_id = author_map[author["id"]]
+                co_author_id = author_map[co_author["id"]]
+                edges += [[author_id, co_author_id, {"timestamp": timestamp}, author_country]]
+                temp_author_set.add((author_id, author_country))
+                temp_author_set.add((co_author_id, co_author_country))
 
     return temp_author_set, edges
 
