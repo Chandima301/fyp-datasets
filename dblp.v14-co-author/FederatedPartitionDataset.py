@@ -190,6 +190,7 @@ if __name__ == "__main__":
         "peoples r china": "asia",
         "taiwan": "asia",
         "brazil": "south america",
-        "singapore": "asia"
+        "singapore": "asia",
+        "": ""
     }
     create_dataset()
