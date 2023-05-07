@@ -81,13 +81,13 @@ def create_attr(authors, paper_dict, selected_attr):
 
     attr = dict()
 
-    for author_id, author_country in authors:
+    for author_id, author_continent in authors:
 
         attr["n_citation"] = citation_count
         if fos != []:
             attr["fos"] = fos
 
-        author_data[author_id] = get_feature_vector(selected_attr, author_id, attr) + [author_country]
+        author_data[author_id] = get_feature_vector(selected_attr, author_id, attr) + [author_continent]
 
 
 def create_dataset():
@@ -139,16 +139,16 @@ def create_dataset():
 
     print("Writing edgelist")
 
-    for country in author_affiliations:
+    for continent in country_continent_map.values():
         edge_count = 0
-        with open("./federated_partitioned_continent/" + country + "_co_author_edgelist.csv", "w+", newline='') as co_author_attr:
+        with open("./federated_partitioned_continent/" + continent + "_co_author_edgelist.csv", "w+", newline='') as co_author_attr:
             writer = csv.writer(co_author_attr, delimiter=",")
             writer.writerow(["source", "target", "timestamp"])
             for edge in sorted_output_edges:
-                if edge[3] == country:
+                if edge[3] == continent:
                     writer.writerow([edge[0], edge[1], edge[2]["timestamp"]])
                     edge_count += 1
-        print(edge_count, " edges written to country - ", country)
+        print(edge_count, " edges written to continent - ", continent)
 
     # output the last stored paper_id attributes into a json and clear memory
     print(count)
@@ -157,16 +157,16 @@ def create_dataset():
     # del paper_data
     print("Writing vertices")  # 4107340
 
-    for country in author_affiliations:
+    for continent in country_continent_map.values():
         vertex_count = 0
-        with open(f"./federated_partitioned/" + country + "_co_author_attr.csv", "w+", newline='') as co_author_attr:
+        with open(f"./federated_partitioned_continent/" + continent + "_co_author_attr.csv", "w+", newline='') as co_author_attr:
             writer = csv.writer(co_author_attr, delimiter=",")
             for id, vector in author_items:
-                if vector[-1] == country:
+                if vector[-1] == continent:
                     data = [id] + vector[:-1]
                     writer.writerow(data)
                     vertex_count += 1
-        print(vertex_count, " vertices written to country ", country)
+        print(vertex_count, " vertices written to continent ", continent)
     del author_items
 
 
