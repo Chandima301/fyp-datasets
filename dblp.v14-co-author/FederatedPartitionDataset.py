@@ -139,7 +139,7 @@ def create_dataset():
 
     print("Writing edgelist")
 
-    for continent in country_continent_map.values():
+    for continent in set(country_continent_map.values()):
         edge_count = 0
         with open("./federated_partitioned_continent/" + continent + "_co_author_edgelist.csv", "w+", newline='') as co_author_attr:
             writer = csv.writer(co_author_attr, delimiter=",")
@@ -157,7 +157,7 @@ def create_dataset():
     # del paper_data
     print("Writing vertices")  # 4107340
 
-    for continent in country_continent_map.values():
+    for continent in set(country_continent_map.values()):
         vertex_count = 0
         with open(f"./federated_partitioned_continent/" + continent + "_co_author_attr.csv", "w+", newline='') as co_author_attr:
             writer = csv.writer(co_author_attr, delimiter=",")
