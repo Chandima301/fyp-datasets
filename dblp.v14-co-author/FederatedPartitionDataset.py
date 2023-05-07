@@ -24,7 +24,7 @@ def create_edges(authors, paper_dict, author_affiliations):
         for co_author in authors:
             co_author_country = co_author["org"].split(",")[-1].strip().lower()
 
-            if co_author["id"] != author["id"] and author_country.lower() in author_affiliations.values() and co_author_country.lower() in author_affiliations.values():
+            if co_author["id"] != author["id"] and author_country.lower() in author_affiliations and co_author_country.lower() in author_affiliations:
                 author_id = author_map[author["id"]]
                 co_author_id = author_map[co_author["id"]]
                 author_continent = country_continent_map[author_country]
@@ -116,13 +116,13 @@ def create_dataset():
             paper_dict = orjson.loads(line[:-2])
             authors_temp = paper_dict["authors"]
 
-            authors, edges = create_edges(authors_temp, paper_dict)
+            authors, edges = create_edges(authors_temp, paper_dict, author_affiliations)
 
             output_edges.extend(edges)
 
             del authors_temp
 
-            create_attr(authors, paper_dict, selected_attr, author_affiliations)
+            create_attr(authors, paper_dict, selected_attr)
 
             if count % 100000 == 0:
                 # output the current stored paper_id attributes into a json and clear memory
