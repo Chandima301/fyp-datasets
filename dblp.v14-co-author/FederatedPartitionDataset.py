@@ -3,7 +3,7 @@ import networkx
 import csv
 import gc
 
-def create_edges(authors, paper_dict):
+def create_edges(authors, paper_dict, author_affiliations):
     global author_map
     temp_author_set = set()
 
@@ -19,17 +19,20 @@ def create_edges(authors, paper_dict):
             author_map[author["id"]] = len(author_map)
 
     for author in authors:
-        author_continent = country_continent_map[author["org"].split(",")[-1].strip().lower()]
+        author_country = author["org"].split(",")[-1].strip().lower()
 
         for co_author in authors:
-            co_author_continent = country_continent_map[co_author["org"].split(",")[-1].strip().lower()]
+            co_author_country = co_author["org"].split(",")[-1].strip().lower()
 
-            if co_author["id"] != author["id"] and author_continent == co_author_continent and author_continent.lower() in country_continent_map.values():
+            if co_author["id"] != author["id"] and author_country.lower() in author_affiliations.values() and co_author_country.lower() in author_affiliations.values():
                 author_id = author_map[author["id"]]
                 co_author_id = author_map[co_author["id"]]
-                edges += [[author_id, co_author_id, {"timestamp": timestamp}, author_continent]]
-                temp_author_set.add((author_id, author_continent))
-                temp_author_set.add((co_author_id, co_author_continent))
+                author_continent = country_continent_map[author_country]
+                co_author_continent = country_continent_map[co_author_country]
+                if author_continent == co_author_continent:
+                    edges += [[author_id, co_author_id, {"timestamp": timestamp}, author_continent]]
+                    temp_author_set.add((author_id, author_continent))
+                    temp_author_set.add((co_author_id, co_author_continent))
 
     return temp_author_set, edges
 
@@ -119,7 +122,7 @@ def create_dataset():
 
             del authors_temp
 
-            create_attr(authors, paper_dict, selected_attr)
+            create_attr(authors, paper_dict, selected_attr, author_affiliations)
 
             if count % 100000 == 0:
                 # output the current stored paper_id attributes into a json and clear memory
@@ -190,7 +193,6 @@ if __name__ == "__main__":
         "peoples r china": "asia",
         "taiwan": "asia",
         "brazil": "south america",
-        "singapore": "asia",
-        "": ""
+        "singapore": "asia"
     }
     create_dataset()
