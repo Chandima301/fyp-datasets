@@ -141,7 +141,7 @@ def create_dataset():
 
     for country in author_affiliations:
         edge_count = 0
-        with open("./federated_partitioned/" + country + "_co_author_edgelist.csv", "w+", newline='') as co_author_attr:
+        with open("./federated_partitioned_continent/" + country + "_co_author_edgelist.csv", "w+", newline='') as co_author_attr:
             writer = csv.writer(co_author_attr, delimiter=",")
             writer.writerow(["source", "target", "timestamp"])
             for edge in sorted_output_edges:
