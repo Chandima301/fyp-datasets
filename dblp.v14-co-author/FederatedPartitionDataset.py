@@ -3,7 +3,7 @@ import networkx
 import csv
 import gc
 
-def create_edges(authors, paper_dict, author_affiliations):
+def create_edges(authors, paper_dict):
     global author_map
     temp_author_set = set()
 
@@ -19,17 +19,17 @@ def create_edges(authors, paper_dict, author_affiliations):
             author_map[author["id"]] = len(author_map)
 
     for author in authors:
-        author_country = author["org"].split(",")[-1].strip().lower()
+        author_continent = country_continent_map[author["org"].split(",")[-1].strip().lower()]
 
         for co_author in authors:
-            co_author_country = co_author["org"].split(",")[-1].strip().lower()
+            co_author_continent = country_continent_map[co_author["org"].split(",")[-1].strip().lower()]
 
-            if co_author["id"] != author["id"] and author_country == co_author_country and author_country.lower() in author_affiliations:
+            if co_author["id"] != author["id"] and author_continent == co_author_continent and author_continent.lower() in country_continent_map.values():
                 author_id = author_map[author["id"]]
                 co_author_id = author_map[co_author["id"]]
-                edges += [[author_id, co_author_id, {"timestamp": timestamp}, author_country]]
-                temp_author_set.add((author_id, author_country))
-                temp_author_set.add((co_author_id, co_author_country))
+                edges += [[author_id, co_author_id, {"timestamp": timestamp}, author_continent]]
+                temp_author_set.add((author_id, author_continent))
+                temp_author_set.add((co_author_id, co_author_continent))
 
     return temp_author_set, edges
 
@@ -113,7 +113,7 @@ def create_dataset():
             paper_dict = orjson.loads(line[:-2])
             authors_temp = paper_dict["authors"]
 
-            authors, edges = create_edges(authors_temp, paper_dict, author_affiliations)
+            authors, edges = create_edges(authors_temp, paper_dict)
 
             output_edges.extend(edges)
 
@@ -129,6 +129,9 @@ def create_dataset():
             count += 1
             del authors, paper_dict
 
+            if count > 300000:
+                break;
+
     sorted_output_edges = sorted(output_edges, key=lambda edge: edge[2]["timestamp"])
 
     print("Writing edgelist")
@@ -142,7 +145,7 @@ def create_dataset():
                 if edge[3] == country:
                     writer.writerow([edge[0], edge[1], edge[2]["timestamp"]])
                     edge_count += 1
-        print(edge_count, " edges written to country ", country)
+        print(edge_count, " edges written to country - ", country)
 
     # output the last stored paper_id attributes into a json and clear memory
     print(count)
@@ -168,4 +171,25 @@ if __name__ == "__main__":
     author_data = dict()
     author_set = set([])
     author_map = dict()
+
+    country_continent_map = {
+        "germany": "europe",
+        "japan": "asia",
+        "spain": "europe",
+        "switzerland": "europe",
+        "england": "europe",
+        "canada": "north america",
+        "france": "europe",
+        "usa": "north america",
+        "australia": "oceania",
+        "china": "asia",
+        "italy": "europe",
+        "south korea": "asia",
+        "india": "asia",
+        'uk': "europe",
+        "peoples r china": "asia",
+        "taiwan": "asia",
+        "brazil": "south america",
+        "singapore": "asia"
+    }
     create_dataset()
