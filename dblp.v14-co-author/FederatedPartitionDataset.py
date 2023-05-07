@@ -132,9 +132,6 @@ def create_dataset():
             count += 1
             del authors, paper_dict
 
-            if count > 300000:
-                break;
-
     sorted_output_edges = sorted(output_edges, key=lambda edge: edge[2]["timestamp"])
 
     print("Writing edgelist")
