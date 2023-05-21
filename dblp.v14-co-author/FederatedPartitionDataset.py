@@ -163,7 +163,7 @@ def create_dataset():
         with open(f"./federated_partitioned_continent/" + continent + "_co_author_attr.csv", "w+", newline='') as co_author_attr:
             writer = csv.writer(co_author_attr, delimiter=",")
             for id, vector in author_items:
-                if continent in vector[num_selected_attr:]:
+                if continent in set(vector[num_selected_attr:]):
                     data = [id] + vector[:num_selected_attr]
                     writer.writerow(data)
                     vertex_count += 1
