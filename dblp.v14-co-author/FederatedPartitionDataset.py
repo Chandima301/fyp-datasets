@@ -104,7 +104,8 @@ def create_dataset():
         reader = csv.reader(selected_attr_file, delimiter=' ')
         selected_attr = [str(row[0]).replace('"', '').lower() for row in reader]
 
-    print("No of selected attributes: ", len(selected_attr))
+    num_selected_attr = len(selected_attr)
+    print("No of selected attributes: ", num_selected_attr)
 
     output_edges = []
 
@@ -159,8 +160,8 @@ def create_dataset():
         with open(f"./federated_partitioned_continent/" + continent + "_co_author_attr.csv", "w+", newline='') as co_author_attr:
             writer = csv.writer(co_author_attr, delimiter=",")
             for id, vector in author_items:
-                if vector[-1] == continent:
-                    data = [id] + vector[:-1]
+                if continent in vector[num_selected_attr:]:
+                    data = [id] + vector[:num_selected_attr]
                     writer.writerow(data)
                     vertex_count += 1
         print(vertex_count, " vertices written to continent ", continent)
