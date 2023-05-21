@@ -130,6 +130,9 @@ def create_dataset():
                 gc.collect()
                 print(count)
 
+            if count == 200000:
+                break
+
             count += 1
             del authors, paper_dict
 
